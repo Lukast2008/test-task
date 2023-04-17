@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://lukast2008.github.io/Test_task-1",
+  "homepage": "https://lukast2008.github.io/test-task",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
