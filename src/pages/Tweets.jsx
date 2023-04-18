@@ -1,5 +1,4 @@
 import styles from "../components/styles.module.css";
-import stylesBTN from "../components/Button/button.module.css";
 import sprite from "../assets/image/Vector.svg";
 import myImage from "../assets/image/picture2 1.png";
 import defaultAvatar from "../assets/image/Hansel.png";
@@ -10,8 +9,16 @@ import { fetchChangePost, fetchUsers } from "../redux/usersOperations";
 import { userSelector } from "../redux/userSelector";
 import FilterTweets from "../components/FilterTweets/FilterTweets";
 import { filterTweetSelector } from "../redux/userSelector";
+import BntLoadMore from "../components/BntLoadMore/BntLoadMore";
+import Btnback from "../components/Btnback/Btnback";
 
-let page = 1;
+let page;
+
+if (localStorage.getItem("page") !== undefined) {
+  page = localStorage.getItem("page");
+} else {
+  page = 1;
+}
 function Tweets() {
   const [tweets, setTweets] = useState([]);
   const [followers, setFollowers] = useState(7777);
@@ -51,7 +58,14 @@ function Tweets() {
         if (data.payload.length < 8) {
           setLoadMore(false);
         }
-        setTweets(data.payload);
+
+        const local = JSON.parse(localStorage.getItem("tweet"));
+
+        if (local.length > data.payload.length) {
+          setTweets(local);
+        } else {
+          setTweets(data.payload);
+        }
       } catch (error) {
         console.error("Error fetching users:", error);
       }
@@ -63,15 +77,28 @@ function Tweets() {
     localStorage.setItem("tweet", JSON.stringify(tweets));
   }, [tweets]);
 
+  const handleNextPage = async () => {
+    console.log(page);
+    page = parseInt(localStorage.getItem("page")) + 1;
 
-
-  const handlePageChange = async () => {
-    page = page + 1;
+    console.log(page);
     const data = await dispatch(fetchUsers({ page, limits: 8 }));
-
-    setTweets((prevState) => [...prevState, ...data.payload]);
+    localStorage.setItem("page", page);
+    setTweets(data.payload);
     if (data.payload.length < 8) {
       setLoadMore(false);
+    }
+  };
+
+  const handlePrevPage = async () => {
+    page = localStorage.getItem("page") - 1;
+    const data = await dispatch(fetchUsers({ page, limits: 8 }));
+
+    localStorage.setItem("page", page);
+
+    setTweets(data.payload);
+    if (data.payload.length === 8) {
+      setLoadMore(true);
     }
   };
 
@@ -92,7 +119,11 @@ function Tweets() {
 
   return (
     <div className={styles.container}>
-      <FilterTweets followOrNot={followOrNot} />
+      <div className={styles.fitches}>
+        {page > 1 && <Btnback prev={handlePrevPage} />}
+        <FilterTweets followOrNot={followOrNot} />
+      </div>
+
       <ul className={styles.listItem}>
         {filterTweet.map(({ user, avatar, followers, id, tweets, follow }) => (
           <li key={id} className={styles.card}>
@@ -118,10 +149,10 @@ function Tweets() {
               </div>
               <div className={styles.follow}>
                 <h2 className={styles.text}>
-                  <span>{tweets}</span> TWEETS
+                  <span>{tweets.toLocaleString()}</span> TWEETS
                 </h2>
                 <h2>
-                  <span>{followers}</span> FOLLOWERS
+                  <span>{followers.toLocaleString()}</span> FOLLOWERS
                 </h2>
                 <Button count={countFollowers} id={id} foll={follow} />
               </div>
@@ -129,13 +160,8 @@ function Tweets() {
           </li>
         ))}
       </ul>
-      {loadMore && (
 
-        
-        <button  className={stylesBTN.Button} type="button" onClick={handlePageChange}>
-          Load More
-        </button>
-      )}
+      {loadMore && <BntLoadMore click={handleNextPage} />}
     </div>
   );
 }
