@@ -9,18 +9,14 @@ li {
   padding-top: 10px;
   display: flex;
   flex-direction: column;
-  /* height: 96vh; */
-
   flex-grow: 1;
 }
 
 .fitches {
-
   display: flex;
   justify-content: center;
   justify-items: center;
   align-items: center;
-  
 }
 
 .listItem {
@@ -54,7 +50,7 @@ li {
   top: 20px;
 }
 
-.hero {
+.image {
   height: 168px;
   width: 308px;
   margin-left: 36px;
