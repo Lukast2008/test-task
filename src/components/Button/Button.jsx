@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import styles from "../Button/button.module.css";
 import { current } from "@reduxjs/toolkit";
 
-
-
 export default function Button({ count, id, foll }) {
   const [follow, setFollow] = useState(foll);
 

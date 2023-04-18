@@ -1,8 +1,6 @@
-import styles from "../Btnback/BtnBack.module.css"
+import styles from "../Btnback/BtnBack.module.css";
 
-
-export default function Btnback({handlePageChange}) {
-
+export default function Btnback({ handlePageChange }) {
   const handlePrevPage = async () => {
     const currentPage = Number(localStorage.getItem("page"));
     const prevPage = currentPage - 1;
@@ -12,7 +10,7 @@ export default function Btnback({handlePageChange}) {
   return (
     <>
       <button type="button" className={styles.btn} onClick={handlePrevPage}>
-       { "<< Back"}
+        {"<< Back"}
       </button>
     </>
   );

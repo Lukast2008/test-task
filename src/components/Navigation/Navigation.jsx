@@ -14,12 +14,6 @@ export const Navigation = () => {
       <NavLink className={css.link} to="/tweets">
         Tweets
       </NavLink>
-
-      {/* {isLoading && (
-        <NavLink className={css.link} to="/contacts">
-          Contacts
-        </NavLink>
-      )} */}
     </nav>
   );
 };
